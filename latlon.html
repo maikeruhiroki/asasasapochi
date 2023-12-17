@@ -8,16 +8,17 @@
 <body>
 
 <!-- ボタン生成とクリック時のイベントハンドラー -->
-<button onclick="showButtonClickInfo(1)">ボタン1</button>
-<button onclick="showButtonClickInfo(2)">ボタン2</button>
-<button onclick="showButtonClickInfo(3)">ボタン3</button>
-<button onclick="showButtonClickInfo(4)">ボタン4</button>
-<button onclick="showButtonClickInfo(5)">ボタン5</button>
-<button onclick="showButtonClickInfo(6)">ボタン6</button>
-<button onclick="showButtonClickInfo(7)">ボタン7</button>
-<button onclick="showButtonClickInfo(8)">ボタン8</button>
-<button onclick="showButtonClickInfo(9)">ボタン9</button>
-<button onclick="showButtonClickInfo(10)">ボタン10</button>
+<button onclick="showButtonClickInfo(-5)">　-5　</button>
+<button onclick="showButtonClickInfo(-4)">　-4　</button>
+<button onclick="showButtonClickInfo(-3)">　-3　</button>
+<button onclick="showButtonClickInfo(-2)">　-2　</button>
+<button onclick="showButtonClickInfo(-1)">　-1　</button>
+<button onclick="showButtonClickInfo(0)">　0　</button>
+<button onclick="showButtonClickInfo(1)">　1　</button>
+<button onclick="showButtonClickInfo(2)">　2　</button>
+<button onclick="showButtonClickInfo(3)">　3　</button>
+<button onclick="showButtonClickInfo(4)">　4　</button>
+<button onclick="showButtonClickInfo(5)">　5　</button>
 
 <!-- クリック情報と位置情報表示エリア -->
 <div id="clickInfoList"></div>
@@ -25,7 +26,7 @@
 <script>
     var clickInfoList = [];
 
-    // ボタンクリック時のイベントハンドラー
+    // ボタンクリック情報を取得
     function showButtonClickInfo(buttonNumber) {
         var clickTime = new Date();
         var position = { latitude: null, longitude: null };
@@ -86,7 +87,23 @@
                 ", 経度 " + clickInfoList[i].position.longitude + "</li>";
         }
         content += "</ul>";
+
+        // ボタンクリック情報と位置情報リストを表示
         clickInfoListElement.innerHTML = content;
+
+        // データをJSON形式のファイルに変換
+        var jsonData = JSON.stringify(clickInfoList, null, 2);
+
+        // Netlifyが提供する_buildディレクトリ内に保存
+        var blob = new Blob([jsonData], { type: 'application/json' });
+        var blobUrl = URL.createObjectURL(blob);
+        var downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = 'click_info.json';
+        downloadLink.innerHTML = 'クリック情報をダウンロード';
+
+        // リンクを表示
+        clickInfoListElement.appendChild(downloadLink);
     }
 </script>
 
